@@ -3,7 +3,7 @@ name: Main CI
 #
 on:
   push:
-    branches:      
+    branches:
       - "next"
       - "next-major"
   pull_request:
@@ -15,7 +15,7 @@ on:
 env:
   DOCKER_REGISTRY_IMAGE: ghcr.io/${{ github.repository_owner }}/containers/${{ github.event.repository.name }}
 permissions:
-  contents: read # for actions/checkout to fetch code  
+  contents: read # for actions/checkout to fetch code
 
 jobs:
   lint-hado:
@@ -30,7 +30,7 @@ jobs:
       contents: read # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
       actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
-         
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,10 +40,10 @@ jobs:
           # This will add both a CLI output to the console and create a results.sarif file
           output_format: cli,sarif
           output_file_path: console,results.sarif
-        
+
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
-        
+
         # Results are generated only on a success or failure
         # this is required since GitHub by default won't run the next step
         # when the previous one has failed. Security checks that do not pass will 'fail'.
@@ -148,7 +148,7 @@ jobs:
         if: success() || failure()
         with:
           sarif_file: results.sarif
-        
+
   docker:
     runs-on: ubuntu-latest
     permissions:
@@ -169,7 +169,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_REGISTRY_IMAGE }}        
+          images: ${{ env.DOCKER_REGISTRY_IMAGE }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -192,7 +192,7 @@ jobs:
         run: |
           mkdir -p /tmp/digests
           digest="${{ steps.build.outputs.digest }}"
-          touch "/tmp/digests/${digest#sha256:}"          
+          touch "/tmp/digests/${digest#sha256:}"
       - name: Upload digest
         uses: actions/upload-artifact@v3
         with:
@@ -200,10 +200,10 @@ jobs:
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
-              
+
   release:
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - lint-hado
       - checkov
       - lint-test
@@ -212,6 +212,7 @@ jobs:
     permissions:
       contents: write
       issues: write
+      packages: write
     outputs:
       version: ${{ steps.version.outputs.new_release_version }}
     steps:
@@ -230,7 +231,7 @@ jobs:
         id: version
         uses: cycjimmy/semantic-release-action@v4
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           semantic_version: 19.0.5
           extra_plugins: |
@@ -242,11 +243,11 @@ jobs:
             conventional-changelog-conventionalcommits@6.1.0
             @semantic-release/exec@6.0.3
             semantic-release-helm3@2.9.3
-         
-         
+
+
   docker-merge:
     runs-on: ubuntu-latest
-    needs: 
+    needs:
       - docker
       - release
     permissions:
@@ -275,19 +276,19 @@ jobs:
             type=ref,event=pr
             type=ref,event=tag
           labels: |
-            org.opencontainers.image.licenses=Apache-2.0          
+            org.opencontainers.image.licenses=Apache-2.0
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}          
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.DOCKER_REGISTRY_IMAGE }}@sha256:%s ' *)          
+            $(printf '${{ env.DOCKER_REGISTRY_IMAGE }}@sha256:%s ' *)
       -
         name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ env.DOCKER_REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}                
+          docker buildx imagetools inspect ${{ env.DOCKER_REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
