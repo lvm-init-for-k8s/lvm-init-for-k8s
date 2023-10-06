@@ -15,5 +15,6 @@ skip-check:
   - CKV_K8S_8 # Liveness not applicable for this chart
   - CKV_K8S_9 # Readiness Not applicable for this chart
   - CKV_K8S_15 # "Image Pull Policy should be Always" is not appropriate for public charts
+  - CKV_K8S_21 #Default namespace will be changed by admin
   - CKV_K8S_43 #checkov:skip=CKV_K8S_43: Not for Public Charts
 summary-position: top
