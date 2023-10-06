@@ -1,8 +1,8 @@
 # lvm-init-for-k8s
 
-![Version: 1.0.0-next.11](https://img.shields.io/badge/Version-1.0.0--next.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-next.11](https://img.shields.io/badge/AppVersion-1.0.0--next.11-informational?style=flat-square)
+![Version: 1.0.0-next.12](https://img.shields.io/badge/Version-1.0.0--next.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-next.12](https://img.shields.io/badge/AppVersion-1.0.0--next.12-informational?style=flat-square)
 
-A Helm chart for Kubernetes
+A tool to initialize available local storage using LVM2
 
 ## Maintainers
 
@@ -15,6 +15,7 @@ A Helm chart for Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
+| config.platform | string | `"unknown"` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/lvm-init-for-k8s/containers/lvm-init-for-k8s"` |  |
