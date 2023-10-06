@@ -134,7 +134,7 @@ jobs:
           output_file_path: console,results.sarif
           quiet: true
           framework: helm
-          directory: charts/s3proxy
+          directory: charts/lvm-init-for-k8s
           var_file: "${{ matrix.values }}-values.yaml"
 
       - name: Upload SARIF file
@@ -246,12 +246,6 @@ jobs:
     permissions:
       packages: write
       contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        version:
-          - v2.1.1
-          # - s3proxy-2.0.0
     steps:
       - name: Download digests
         uses: actions/download-artifact@v3
