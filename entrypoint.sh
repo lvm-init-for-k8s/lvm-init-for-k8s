@@ -1,5 +1,4 @@
 #!/bin/bash
-
 declare -A log_levels=( [FATAL]=0 [ERROR]=3 [WARNING]=4 [INFO]=6 [DEBUG]=7)
 if ! command -v date &> /dev/null
 then
