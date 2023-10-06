@@ -64,9 +64,6 @@ jobs:
         platform:
           - linux/amd64
           - linux/arm64
-        version:
-          - v2.1.1
-          # - s3proxy-2.0.0
 
     steps:
       - name: checkout
@@ -87,13 +84,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v4
-        with:
-          # Repository name with owner. For example, actions/checkout
-          # Default: ${{ github.repository }}
-          repository: 's3proxy-distro/s3proxy'
-          path: source
-          ref: ${{ matrix.version }}
       - name: Build and push by digest
         id: build
         uses: docker/build-push-action@v5
@@ -178,7 +168,6 @@ jobs:
           images: ${{ env.DOCKER_REGISTRY_IMAGE }}
           flavor: |
             latest=false
-            prefix=${{ matrix.version }}_
           tags: |
             type=sha,format=long
             type=sha
