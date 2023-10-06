@@ -55,8 +55,7 @@
       {
         "chartPath": "charts/lvm-init-for-k8s",
         "registry": "ghcr.io/lvm-init-for-k8s/charts",
-        "populateChangelog": false,
-        "onlyUpdateVersion": false
+        "populateChangelog": false
       }
     ],
     [
