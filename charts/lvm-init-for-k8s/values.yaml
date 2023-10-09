@@ -43,7 +43,7 @@ securityContext:
   # capabilities:
   #   drop:
   #   - ALL
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
   # runAsNonRoot: false
   # runAsUser: 1000
 

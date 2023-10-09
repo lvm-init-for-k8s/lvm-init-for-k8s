@@ -28,5 +28,6 @@ skip-check:
   - CKV_K8S_11
   - CKV_K8S_13
   - CKV_K8S_23
+  - CKV_K8S_22 # Due to issue with LVM2 writing lock in /var
 
 summary-position: top
