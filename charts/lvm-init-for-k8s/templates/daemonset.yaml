@@ -22,23 +22,43 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "lvm-init-for-k8s.serviceAccountName" . }}
-      containers:
-        - name: {{ .Chart.Name }}
+      initContainers:
+        - name: init
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.images.init.repository }}:{{ .Values.images.init.tag | default .Chart.AppVersion }}"
           args: [{{ .Values.config.platform | quote}}]
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.images.init.pullPolicy }}
+          env:
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /dev/
               name: local-disk
               mountPropagation: "HostToContainer"
+      containers:
+        - name: untaint
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.kubectl.repository }}:{{ .Values.images.kubectl.tag | default .Capabilities.KubeVersion }}"
+          command: ["bash"]
+          args: ["-c","sleep -1"]
+          imagePullPolicy: {{ .Values.images.kubectl.pullPolicy }}
+          env:
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
       volumes:
         - name: local-disk
           hostPath:
-            path: /dev/            
+            path: /dev/
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

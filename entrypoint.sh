@@ -103,7 +103,7 @@ fi
 
 
 trap '' INT TERM
-sleep infinity & pid=$!
+# sleep infinity & pid=$!
 
 while wait $pid; test $? -ge 128
 do echo 'exiting' | json_logger "INFO"
