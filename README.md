@@ -1,6 +1,6 @@
 # lvm-init-for-k8s
 
-![Version: 1.0.0-next.15](https://img.shields.io/badge/Version-1.0.0--next.15-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-next.15](https://img.shields.io/badge/AppVersion-1.0.0--next.15-informational?style=flat-square)
+![Version: 1.0.0-next.16](https://img.shields.io/badge/Version-1.0.0--next.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-next.16](https://img.shields.io/badge/AppVersion-1.0.0--next.16-informational?style=flat-square)
 
 A tool to initialize available local storage using LVM2
 
@@ -31,7 +31,7 @@ A tool to initialize available local storage using LVM2
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext.privileged | bool | `true` |  |
-| securityContext.readOnlyRootFilesystem | bool | `true` |  |
+| securityContext.readOnlyRootFilesystem | bool | `false` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
