@@ -1,0 +1,33 @@
+tolerations:
+  - key: "CriticalAddonsOnly"
+    operator: "Exists"
+
+modrules:
+  - name: nvmenotready
+    spec:
+      type: Patch
+      admissionOperations:
+        - CREATE
+        - UPDATE
+      match:
+      # Applies to nodes
+      - select: "$.kind"
+        matchValue: Node
+      # Only nodes with nvmeStorage Class
+      - select: '$.metadata.labels["storageClass"]'
+        matchValue: nvme
+      #If we have already initalized then this will be set
+      - select: '$.metadata.labels["*"].key'
+        matchValue: storageVolumeGroup
+        negate: true
+      # If the taint is there don't set it again
+      - select: "$.spec.taints[*].key"
+        matchValue: nvmeReady
+        negate: true
+      patch:
+        - op: add
+          path: /spec/taints/-1
+          value: |-
+            effect: NoSchedule
+            key: nvmeReady
+            value: "false"

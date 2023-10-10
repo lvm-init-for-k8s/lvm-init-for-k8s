@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "lvm-init-for-k8s.fullname" . }}
+  labels:
+    {{- include "lvm-init-for-k8s.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "lvm-init-for-k8s.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "lvm-init-for-k8s.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "lvm-init-for-k8s.serviceAccountName" . }}
+      initContainers:
+        - name: init
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.init.repository }}:{{ .Values.images.init.tag | default .Chart.AppVersion }}"
+          args: [{{ .Values.config.platform | quote}}]
+          imagePullPolicy: {{ .Values.images.init.pullPolicy }}
+          env:
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /dev/
+              name: local-disk
+              mountPropagation: "HostToContainer"
+      containers:
+        - name: untaint
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.kubectl.repository }}:{{ .Values.images.kubectl.tag | default (print .Capabilities.KubeVersion.Version | replace "v" "" ) }}"
+          command: ["bash"]
+          args: ["-c","kubectl label node $(MY_NODE_NAME) storageVolumeGroup=instancestore;kubectl taint node $(MY_NODE_NAME) nvmeReady-; sleep 20; exit 0"]
+          imagePullPolicy: {{ .Values.images.kubectl.pullPolicy }}
+          env:
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: local-disk
+          hostPath:
+            path: /dev/
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

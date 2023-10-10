@@ -1,0 +1,6 @@
+owner: lvm-init-for-k8s
+git-repo: lvm-init-for-k8s
+package-path: .
+release-name-template: v{{ .Version }}
+skip-existing: true
+make-release-latest: false
