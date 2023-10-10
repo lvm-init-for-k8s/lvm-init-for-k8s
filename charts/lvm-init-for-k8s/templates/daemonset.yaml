@@ -46,7 +46,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.kubectl.repository }}:{{ .Values.images.kubectl.tag | default (print .Capabilities.KubeVersion.Version | replace "v" "" ) }}"
           command: ["bash"]
-          args: ["-c","kubectl label node $(MY_NODE_NAME) storageVolumeGroup=instancestore;kubectl taint node $(MY_NODE_NAME) nvmeReady-;sleep 30s"]
+          args: ["-c","kubectl label node $(MY_NODE_NAME) storageVolumeGroup=instancestore;kubectl taint node $(MY_NODE_NAME) nvmeReady-"]
           imagePullPolicy: {{ .Values.images.kubectl.pullPolicy }}
           env:
             - name: MY_NODE_NAME
