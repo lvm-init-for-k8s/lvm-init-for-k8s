@@ -1,0 +1,55 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-node-taint-nvme-not-ready
+  annotations:
+    policies.kyverno.io/title: Add node taint to hold nodes not ready
+    policies.kyverno.io/category: Other
+    policies.kyverno.io/subject: Node
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      For nodes with local disk nvme/ssd apply a taint to allow disk initialization
+      to occur using. Use of this policy requires removal of the Node resource filter
+      in the Kyverno ConfigMap ([Node,*,*]). Due to Kubernetes CVE-2021-25735, this policy
+      requires, at minimum, one of the following versions of Kubernetes:
+      v1.18.18, v1.19.10, v1.20.6, or v1.21.0.
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: add-node-taint-nvme-not-ready
+      match:
+        any:
+          - resources:
+              kinds:
+                - Node
+              operations:
+                - UPDATE
+              selector:
+                matchLabels:
+                  storageClass: nvme
+                  kubernetes.io/role: "agent"
+                matchExpressions:
+                  - { key: storageVolumeGroup, operator: DoesNotExist }
+      preconditions:
+        all:
+          - key: "{{request.object.spec.providerID}}"
+            operator: NotEquals
+            value: ""
+          - key: "node.kubernetes.io/not-ready"
+            operator: AllNotIn
+            value: "{{ request.object.spec.taints[].key || `[]` }}"
+          - key: "node.cloudprovider.kubernetes.io/uninitialized"
+            operator: AllNotIn
+            value: "{{ request.object.spec.taints[].key || `[]` }}"
+          - key: "nvmeReady"
+            operator: AllNotIn
+            value: "{{ request.object.spec.taints[].key || `[]` }}"
+      mutate:
+        patchesJson6902: |-
+          - path: "/spec/taints/-"
+            op: add
+            value:
+              key: nvmeReady
+              value: "false"
+              effect: NoSchedule
