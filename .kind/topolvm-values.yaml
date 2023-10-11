@@ -97,3 +97,5 @@ scheduler:
 webhook:
   podMutatingWebhook:
     enabled: false
+cert-manager:
+  enabled: false
