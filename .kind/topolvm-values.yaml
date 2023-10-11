@@ -98,7 +98,7 @@ webhook:
   podMutatingWebhook:
     enabled: false
 cert-manager:
-  enabled: true
+  enabled: false
   installCRDs: false
   tolerations:
     - key: "CriticalAddonsOnly"

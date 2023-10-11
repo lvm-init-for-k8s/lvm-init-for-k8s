@@ -22,11 +22,12 @@ affinity:
               operator: In
               values:
                 - linux
-        - matchExpressions:
             - key: storageClass
               operator: In
               values:
                 - nvme
+            - key: storageVolumeGroup
+              operator: DoesNotExist
 tolerations:
   - key: "storageClass"
     operator: "Exists"
