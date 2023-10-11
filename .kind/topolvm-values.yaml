@@ -97,21 +97,3 @@ scheduler:
 webhook:
   podMutatingWebhook:
     enabled: false
-cert-manager:
-  enabled: false
-  installCRDs: false
-  tolerations:
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"
-  webhook:
-    tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
-  cainjector:
-    tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
-  startupapicheck:
-    tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
