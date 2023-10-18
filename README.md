@@ -16,6 +16,7 @@ A tool to initialize available local storage using LVM2
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
 | config.platform | string | `"unknown"` |  |
+| config.runForever | bool | `true` |  |
 | fullnameOverride | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | images.init.pullPolicy | string | `"IfNotPresent"` |  |

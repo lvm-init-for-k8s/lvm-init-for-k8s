@@ -98,20 +98,4 @@ webhook:
   podMutatingWebhook:
     enabled: false
 cert-manager:
-  enabled: true
-  installCRDs: false
-  tolerations:
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"
-  webhook:
-    tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
-  cainjector:
-    tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
-  startupapicheck:
-    tolerations:
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
+  enabled: false
