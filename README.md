@@ -1,6 +1,6 @@
 # lvm-init-for-k8s
 
-![Version: 1.0.0-next.21](https://img.shields.io/badge/Version-1.0.0--next.21-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-next.21](https://img.shields.io/badge/AppVersion-1.0.0--next.21-informational?style=flat-square)
+![Version: 1.0.0-next.22](https://img.shields.io/badge/Version-1.0.0--next.22-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-next.22](https://img.shields.io/badge/AppVersion-1.0.0--next.22-informational?style=flat-square)
 
 A tool to initialize available local storage using LVM2
 
@@ -16,6 +16,7 @@ A tool to initialize available local storage using LVM2
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
 | config.platform | string | `"unknown"` |  |
+| config.runForever | bool | `true` |  |
 | fullnameOverride | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | images.init.pullPolicy | string | `"IfNotPresent"` |  |
