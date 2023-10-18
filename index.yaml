@@ -14,6 +14,18 @@ entries:
     - https://github.com/lvm-init-for-k8s/lvm-init-for-k8s/releases/download/v1.0.0/lvm-init-for-k8s-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
+    appVersion: 1.0.0-next.22
+    created: "2023-10-18T11:35:54.00542429Z"
+    description: A tool to initialize available local storage using LVM2
+    digest: 92b0b3189cd26ef3746f647f88e19fb9326d0c7cc0485f9a3c5d2d77e50853d8
+    maintainers:
+    - name: ryanfaircloth
+    name: lvm-init-for-k8s
+    type: application
+    urls:
+    - https://github.com/lvm-init-for-k8s/lvm-init-for-k8s/releases/download/v1.0.0-next.22/lvm-init-for-k8s-1.0.0-next.22.tgz
+    version: 1.0.0-next.22
+  - apiVersion: v2
     appVersion: 1.0.0-next.21
     created: "2023-10-18T11:29:52.047419781Z"
     description: A tool to initialize available local storage using LVM2
@@ -109,4 +121,4 @@ entries:
     urls:
     - https://github.com/lvm-init-for-k8s/lvm-init-for-k8s/releases/download/v1.0.0-next.14/lvm-init-for-k8s-1.0.0-next.14.tgz
     version: 1.0.0-next.14
-generated: "2023-10-18T11:29:52.048632985Z"
+generated: "2023-10-18T11:35:54.005523296Z"
