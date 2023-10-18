@@ -4,7 +4,7 @@
 
 config:
   platform: unknown
-
+  runForever: true
 replicaCount: 1
 
 images:
