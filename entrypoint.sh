@@ -36,6 +36,8 @@ catch() {
   exit 1
 }
 
+
+
 if ! command -v nvme &> /dev/null
 then
     echo "nvme could not be found" | json_logger "FATAL"
@@ -69,7 +71,7 @@ fi
 PLATFORM="${1:-aws}"
 echo Platform is $PLATFORM | json_logger "INFO"
 nvme list --output-format=json | tr '^ *' ' ' |  tr '\n' ' ' | json_logger "INFO"
-OUTPUT=$(vgscan || true 2> /dev/null | grep instancestore)
+OUTPUT=$(vgscan || true 2> /dev/null | grep ${VG_NAME:-instancestore})
 if [ $PLATFORM == aws ]; then
   condition="Instance"
 elif [ $PLATFORM == azure ]; then
@@ -93,8 +95,8 @@ then
         done
 
 
-        echo "Creating VG=instancestore $(printf '%s ' ${disks[@]})" | json_logger "INFO"
-        vgcreate instancestore $(printf '%s ' ${disks[@]}) | json_logger "INFO"
+        echo "Creating VG=${VG_NAME:-instancestore} $(printf '%s ' ${disks[@]})" | json_logger "INFO"
+        vgcreate ${VG_NAME:-instancestore} $(printf '%s ' ${disks[@]}) | json_logger "INFO"
     fi
 else
     echo "VG exists that is unexpected if this is a new node" | json_logger "INFO"
