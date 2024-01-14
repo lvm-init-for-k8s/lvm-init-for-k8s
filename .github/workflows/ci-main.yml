@@ -190,9 +190,9 @@ jobs:
           outputs: type=image,name=${{ env.DOCKER_REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
       - name: Export digest
         run: |
-          mkdir -p /tmp/digests
+          mkdir -p /tmp/digests/${{ matrix.platform }}
           digest="${{ steps.build.outputs.digest }}"
-          echo "${{ steps.build.outputs.digest }}" >/tmp/digests/${{ matrix.platform }}.txt
+          echo $digest >/tmp/digests/${{ matrix.platform }}/digest.txt
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
