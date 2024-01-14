@@ -7,3 +7,28 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: "kubernetes.io/os"
+              operator: "In"
+              values: ["linux"]
+            - key: storageClass
+              operator: In
+              values:
+                - nvme
+tolerations:
+  - key: "storageClass"
+    operator: "Equal"
+    value: "nvme"
+    effect: "NoSchedule"
+  - key: "computeClass"
+    operator: "Equal"
+    value: "compute"
+    effect: "NoSchedule"
+  - key: "nvmeReady"
+    operator: "Equal"
+    value: "false"
+    effect: "NoSchedule"
