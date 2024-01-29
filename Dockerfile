@@ -1,7 +1,7 @@
 # Container notes
 # checkov:skip=CKV_DOCKER_2: This container is used as an init
 # checkov:skip=CKV_DOCKER_3: This container must be root
-FROM docker.io/alpine:3.19.0
+FROM docker.io/alpine:3.19.1
 
 RUN apk add --no-cache \
     nvme-cli=2.6-r0 \
